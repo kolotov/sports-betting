@@ -43,7 +43,7 @@ services:
       - db
 
   composer:
-    image: composer:2.1.9
+    image: composer:latest
     volumes:
     - ./www:/var/www/site
 
