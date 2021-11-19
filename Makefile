@@ -14,6 +14,10 @@ run:
 	docker-compose exec php docker-php-ext-install mysqli pdo pdo_mysql
 	docker-compose restart php
 	make composer-install
+
+restart:
+	docker-compose restart 
+
 bash:
 	$(app_exec) web bash
 
