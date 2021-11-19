@@ -33,7 +33,7 @@ USE `database`;
 CREATE TABLE `balance` (
   `balance_id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `balance_curency` char(3) NOT NULL,
+  `balance_currency` char(3) NOT NULL,
   `balance_value` decimal(10,2) DEFAULT 0.00
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -41,7 +41,7 @@ CREATE TABLE `balance` (
 -- Dumping data for table `balance`
 --
 
-INSERT INTO `balance` (`balance_id`, `user_id`, `balance_curency`, `balance_value`) VALUES
+INSERT INTO `balance` (`balance_id`, `user_id`, `balance_currency`, `balance_value`) VALUES
 (1, 1, 'usd', '200.00'),
 (3, 1, 'eur', '100.00'),
 (4, 1, 'rub', '5000.00'),
