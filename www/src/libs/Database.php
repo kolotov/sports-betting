@@ -23,9 +23,10 @@ class Database
     private $_pdo;
     private $_stmt;
 
-    public function __construct(): void
+    public function __construct()
     {
         $this->_init();
+
 
         $options = array(
             PDO::ATTR_PERSISTENT => true, //persistent connection
@@ -58,9 +59,7 @@ class Database
 
     private function _getDSN(): string
     {
-        return "{$this->_db_driver}:
-                                    host={$this->_db_host};
-                                    dbname={$this->_database}";
+        return "{$this->_db_driver}:host={$this->_db_host};dbname={$this->_database}";
     }
 
     public function query(string $sql): self
@@ -81,12 +80,12 @@ class Database
         return $this;
     }
 
-    public function getAll(): object|false
+    public function getAll()
     {
         return $this->_stmt->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function getRow(): object|false
+    public function getRow()
     {
         return $this->_stmt->fetch(PDO::FETCH_OBJ);
     }
