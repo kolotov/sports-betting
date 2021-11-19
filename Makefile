@@ -11,7 +11,7 @@ run:
 	docker-compose stop
 	docker-compose up -d --build
 	docker-compose rm -f composer
-	docker-compose exec php docker-php-ext-install mysqli
+	docker-compose exec php docker-php-ext-install mysqli pdo pdo_mysql
 	docker-compose restart php
 	make composer-install
 bash:
