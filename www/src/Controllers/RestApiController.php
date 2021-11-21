@@ -9,11 +9,6 @@ use Sports\Betting\Views\RestApiView;
 use Exception;
 use ReflectionMethod;
 
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
-
-
 class RestApiController extends AbstractController
 {
     private AbstractController $_context;
