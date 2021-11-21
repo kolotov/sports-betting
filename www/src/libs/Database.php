@@ -82,13 +82,18 @@ class Database
         return $this;
     }
 
-    public function getAll()
+    public function getAll($assoc = false)
     {
-        return $this->_stmt->fetchAll(PDO::FETCH_OBJ);
+        return $this->_stmt->fetchAll(($assoc ? PDO::FETCH_ASSOC : PDO::FETCH_OBJ));
     }
 
-    public function getRow()
+    public function getRow($assoc = false)
     {
-        return $this->_stmt->fetch(PDO::FETCH_OBJ);
+        return $this->_stmt->fetch(($assoc ? PDO::FETCH_ASSOC : PDO::FETCH_OBJ));
+    }
+
+    public function getCount()
+    {
+        return $this->_stmt->rowCount();
     }
 }
