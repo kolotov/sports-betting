@@ -50,10 +50,10 @@ class Database
      * **/
     private function _init(): void
     {
-        $this->_db_host = $_ENV['MYSQL_SERVER'] ?? '';
-        $this->_db_user = $_ENV['MYSQL_USER'] ?? '';
-        $this->_db_password = $_ENV['MYSQL_PASSWORD'] ?? '';
-        $this->_database = $_ENV['MYSQL_DATABASE'] ?? '';
+        $this->_db_host = getenv('MYSQL_SERVER');
+        $this->_db_user = getenv('MYSQL_USER');
+        $this->_db_password = getenv('MYSQL_PASSWORD');
+        $this->_database = getenv('MYSQL_DATABASE');
         $this->_db_driver = 'mysql';
     }
 
