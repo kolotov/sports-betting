@@ -70,7 +70,9 @@ class Database
 
     public function bind($param, $value): self
     {
-        $this->_stmt->bindValue($param, $value);
+        $type = is_int($value) ? PDO::PARAM_INT : PDO::PARAM_STR;
+
+        $this->_stmt->bindValue($param, $value, $type);
         return $this;
     }
 
