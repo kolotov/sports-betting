@@ -30,6 +30,11 @@ class FrontController extends AbstractController
             $this->_render();
             break;
 
+        case 'css':
+        case 'js':
+        case 'vendor':
+            break;
+
         default:
             $this->_pageNotFound();
             break;
