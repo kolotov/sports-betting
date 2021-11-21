@@ -7,6 +7,10 @@ namespace Sports\Betting\Tests\Models;
 use Sports\Betting\Models\User;
 use PHPUnit\Framework\TestCase;
 
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
 class UserTest extends TestCase
 {
     private $_user;

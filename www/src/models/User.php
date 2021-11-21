@@ -7,13 +7,13 @@ namespace Sports\Betting\Models;
 
 use Sports\Betting\Libs\Database;
 
-use App\Libs\Database;
 use Exception;
+use stdClass;
 
-class User
+class User extends AbstractModel
 {
+    private $_id;
     private $_db;
-    private $_login;
 
     public function __construct()
     {
@@ -22,7 +22,17 @@ class User
 
     public function setUser(string $login): void
     {
-        $this->_login = $login;
+        $count = $this->_db
+            ->query('SELECT user_id FROM users WHERE user_login=:login')
+            ->bind(':login', $login)
+            ->execute()
+            ->getCount();
+
+        if ($count === 0) {
+            throw new Exception("Not found user {$login}", 404);
+        }
+        $user = $this->_db->getRow();
+        $this->_id =  $user->user_id;
     }
 
     public function login($login, $password): bool
@@ -33,14 +43,7 @@ class User
             ->execute()
             ->getRow();
 
-        $hashed_password = $user->user_pswd_hash;
-
-        if ($this->_verify($password, $hashed_password)) {
-            $this->_setToken();
-            return true;
-        } else {
-            return false;
-        }
+        return $this->_verify($password, $user->user_pswd_hash);
     }
 
     //verifycation for example password_verify($password, $hashed_password)
@@ -49,52 +52,43 @@ class User
         return true;
     }
 
-    /**
-     * set token on client side (for example signature key)
-     * */
-    private function _setToken(): void
-    {
-    }
 
-    /**
-     * chek user token on client side
-    * */
-    private function _isValidToken(): bool
-    {
-        return true;
-    }
-
-    private function _validCurency(string $currency): void
+    private function _validCurency(string $currency): bool
     {
         if (!in_array($currency, ['usd', 'eur', 'rub'])) {
-            throw new Exception("Currency \"{$currency}\" is incorrect");
+            throw new Exception("Currency \"{$currency}\" is incorrect", 400);
         }
+        return true;
     }
 
     public function getBalance(string $currency): float
     {
+        $this->_validCurency($currency);
         $user = $this->_db
             ->query(
                 'SELECT balance_value FROM balance 
-                 WHERE user_id IN (SELECT user_id FROM users WHERE user_login=:login)
+                 WHERE user_id =:id
                  AND balance_currency =:currency'
             )
-            ->bind(':login', $this->_login)
+            ->bind(':id', $this->_id)
             ->bind(':currency', $currency)
             ->execute()
             ->getRow();
-        return (float) $user->balance_value ?? 0.00;
+
+        return (float) ($user->balance_value ?? 0.00);
     }
 
     public function setBalance(string $currency, float $money)
     {
+        $this->_validCurency($currency);
+
         $this->_db
             ->query(
-                'UPDATE balance SET balance_value=:money
-                 WHERE user_id IN (SELECT user_id FROM users WHERE user_login=:login) 
+                'UPDATE balance SET balance_value=:money 
+                 WHERE user_id =:id 
                  AND balance_currency =:currency'
             )
-            ->bind(':login', $this->_login)
+            ->bind(':id', $this->_id)
             ->bind(':currency', $currency)
             ->bind(':money', $money)
             ->execute();
@@ -102,15 +96,41 @@ class User
 
     public function addBalance(string $currency, float $money)
     {
+        $this->_validCurency($currency);
         $this->_db
             ->query(
                 'UPDATE balance SET balance_value=balance_value+:money
-                 WHERE user_id IN (SELECT user_id FROM users WHERE user_login=:login)
+                 WHERE user_id =:id
                  AND balance_currency =:currency'
             )
-            ->bind(':login', $this->_login)
+            ->bind(':id', $this->_id)
             ->bind(':currency', $currency)
             ->bind(':money', $money)
             ->execute();
+    }
+
+    public function getUserInfo(): array
+    {
+        $user = $this->_db
+            ->query('SELECT user_id, user_login, user_name FROM users WHERE user_id=:id')
+            ->bind(':id', $this->_id)
+            ->execute()
+            ->getRow(true);
+
+        return $user;
+    }
+
+
+    public function getUsers(): array
+    {
+        $users = $this->_db
+            ->query('SELECT user_login, user_name FROM users')
+            ->execute();
+
+        if ($users->getCount() === 0) {
+            return [];
+        }
+
+        return $users->getAll();
     }
 }
