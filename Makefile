@@ -21,9 +21,6 @@ restart:
 bash:
 	$(app_exec) web bash
 
-composer-autoload:
-	$(app_run) --rm composer dump-autoload
-
 composer-install:
 	$(app_run) --rm composer install
 
@@ -35,3 +32,6 @@ composer:
 
 test:
 	$(app_exec) php $(phpunit) --testdox --colors=auto tests
+
+test-filter:
+	$(app_exec) php $(phpunit) --testdox --colors=auto --filter $(class) tests
