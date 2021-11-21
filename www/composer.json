@@ -27,5 +27,7 @@
       "email": "gkolotov.adv@gmail.com"
     }
   ],
-  "require": {}
+  "require": {
+    "twbs/bootstrap": "5.1.3"
+  }
 }
