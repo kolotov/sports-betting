@@ -7,7 +7,7 @@
 
 declare(strict_types=1);
 
-namespace App\Libs;
+namespace Sports\Betting\Libs;
 
 use PDO;
 use PDOException;
@@ -26,7 +26,6 @@ class Database
     public function __construct()
     {
         $this->_init();
-
 
         $options = array(
             PDO::ATTR_PERSISTENT => true, //persistent connection

@@ -2,7 +2,9 @@
 
 declare(strict_types=1);
 
-use App\Models\User;
+namespace Sports\Betting\Tests\Models;
+
+use Sports\Betting\Models\User;
 use PHPUnit\Framework\TestCase;
 
 class UserTest extends TestCase

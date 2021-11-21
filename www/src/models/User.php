@@ -3,7 +3,9 @@
 
 declare(strict_types=1);
 
-namespace App\Models;
+namespace Sports\Betting\Models;
+
+use Sports\Betting\Libs\Database;
 
 use App\Libs\Database;
 use Exception;
