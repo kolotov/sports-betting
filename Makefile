@@ -8,7 +8,7 @@ app_exec = docker-compose exec --workdir $(workdir)
 app_run  = docker-compose run --workdir $(workdir)
 
 #install logs
-logs =  | tee -a ./www/logs/install.log
+logs =  | tee -a install.log
 
 run:
 	docker-compose stop $(logs)
@@ -19,22 +19,22 @@ run:
 	make composer-install $(logs)
 
 restart:
-	docker-compose restart $(logs)
+	docker-compose restart
 
 bash:
-	$(app_exec) web bash $(logs)
+	$(app_exec) web bash
 
 composer-install:
-	$(app_run) --rm composer install $(logs)
+	$(app_run) --rm composer install
 
 composer-update:
-	$(app_run) --rm composer update $(logs)
+	$(app_run) --rm composer update
 
 composer:
-	$(app_run) --rm composer $(cmd) $(logs)
+	$(app_run) --rm composer $(cmd)
 
 test:
-	$(app_exec) php $(phpunit) --testdox --colors=auto tests $(logs)
+	$(app_exec) php $(phpunit) --testdox --colors=auto tests
 
 test-filter:
-	$(app_exec) php $(phpunit) --testdox --colors=auto --filter $(class) tests $(logs)
+	$(app_exec) php $(phpunit) --testdox --colors=auto --filter $(class) tests
