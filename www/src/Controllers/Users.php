@@ -30,13 +30,13 @@ class Users extends AbstractController
             throw new Error('Incorrect args', 403);
         }
 
-        $sum = (int) $bet['sum'];
+        $sum = $bet['sum'];
         $ratio = round($bet['ratio'], 2);
         $result = (int) $bet['result'];
 
 
-        if ($sum < 1 || $sum > 500) {
-            throw new Error('The bet amount must be in the range from 1 to 500', 403);
+        if ($sum < 1 || $sum > 500 || is_float($sum)) {
+            throw new Error('The bet amount must be in the range from 1 to 500 and integer number', 403);
         }
 
         if ($ratio < 1.01 || $ratio > 40.40) {

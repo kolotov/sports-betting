@@ -5,63 +5,68 @@ document.addEventListener("DOMContentLoaded", (event) => {
     document.getElementById("win-first").onmousedown = (e) => actionBet(e);
     document.getElementById("win-noone").onmousedown = (e) => actionBet(e);
     document.getElementById("win-second").onmousedown = (e) => actionBet(e);
-   
     document.getElementById("user-id").onchange = (e) => getBalance();
     document.getElementById("bet-currency").onchange = (e) => getBalance();
+
 });
 
 const actionBet = (e) => {
  return new Promise((resolve, reject) => {    
-    const action_el = e.target;
-    const user_el =  document.getElementById("user-id");
-    const currency_el = document.getElementById("bet-currency");
-    const sum_el =  document.getElementById("bet-sum");
-    const winner_el = document.getElementById("winner"); 
+    let data = {};
+    let bet = {};    
 
-   if ((action_el.hasAttribute("data-ratio") === false) ||
-       (action_el.hasAttribute("data-result") === false)) {
+
+   if ((e.target.hasAttribute("data-ratio") === false) ||
+       (e.target.hasAttribute("data-result") === false)) {
     throw new Error("Нарушена верстка страницы");
    }
- 
-    const user_id = user_el.value;
-    if( (user_id > 0) === false) {
-        throw new Error("Выберите пользователя!");
-    }
-
-   
-    let data = {};
-    let bet = {};
     
-    const ratio = action_el.getAttribute("data-ratio");
+    const ratio = e.target.getAttribute("data-ratio");
     bet.ratio = ratio;
     
-    const result = action_el.getAttribute("data-result");
+    const result = e.target.getAttribute("data-result");
     bet.result = parseInt(result);
 
-    if(
-        currency_el.value != 'usd' && 
-        currency_el.value != 'rub' && 
-        currency_el.value != 'eur'
-    ) {
+
+    const currency = document.getElementById("bet-currency").value;
+    if (currency != 'usd' && currency != 'rub' && currency != 'eur') {
         throw new Error("Выберите валюту!");
     }
-    bet.currency = currency_el.value;
+    bet.currency = currency;
 
-    if( sum_el.value < 1 || sum_el.value > 500) {
-        throw new Error("Сумма ставки должна быть в пределах от 1 до 500 денежных единиц");
-    }
-    bet.sum = sum_el.value;
- 
-    data.bet = bet;
+    const sum = Number(document.getElementById("bet-sum").value);
     
-    if (winner_el.checked === false) {
+    if (isNaN(sum)) {
+        throw new Error("Вы не задали сумму ставки");
+    }
+     
+    if (sum < 1 || sum > 500 || sum != Math.round(sum)) {
+        throw new Error("Сумма ставки должна целым числом в пределах от 1 до 500 денежных единиц");
+    }
+     
+    const balance = Number(document.getElementById("user-balance").value);
+    if (sum > balance) {
+        throw new Error("На балансе недостаточно средств");
+    } 
+    bet.sum = sum;
+     
+    
+    const winner = document.getElementById("winner").checked; 
+    if (winner === false) {
         data.winner =  bet.result > 0 ? (bet.result - 1) : 2;
     } else  {
         data.winner = bet.result;
     }
 
+    const user_id = Number(document.getElementById("user-id").value);
+
+    if (user_id <= 0 || isNaN(user_id)) {
+        throw new Error("Выберите пользователя!");
+    }
+
     const url = `/api/users/${user_id}/action/bet/`;
     const method = 'PUT';
+    data.bet = bet;
     resolve(sendRequest(method, url, data));
 })
    .then(result => getBalance())
@@ -91,11 +96,10 @@ const actionBet = (e) => {
 
     const json = await response.json();
     
-    if (response.ok) {
-        sendMsg(''); 
-    }else {
+    if (response.ok === false ) {
         throw new Error(json.error.message);
     }
+
     if (method === 'GET') {
         return json;
     }

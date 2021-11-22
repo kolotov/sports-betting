@@ -33,7 +33,13 @@ const updateRate = () => {
 
 
 const sendMsg = (msg) => {
-        document.getElementById('msg-label').innerHTML = msg;
+        if ((String(msg).length) > 0) {
+            document.getElementById('msg-label').innerHTML = msg;
+            document.getElementById('msg-label').style.setProperty('display', 'block', 'important');
+            setTimeout( () => { 
+                document.getElementById('msg-label').style.setProperty('display', 'none', 'important'); 
+            }, 2000);
+        }
 };
 
 const renderUserList = (users) => {

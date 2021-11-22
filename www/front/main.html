@@ -41,6 +41,18 @@
       .msg {
         text-align: left;
       }
+      /* remove Remove Arrows/Spinners */
+      /* Chrome, Safari, Edge, Opera */
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      /* Firefox */
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
     </style>
   </head>
   <body>
@@ -83,8 +95,10 @@
             >
 
             <input
-              type="text"
+              type="number"
               id="bet-sum"
+              min="1"
+              max="500"
               class="form-control mr-4"
               aria-label="Ставка"
               aria-describedby="inputGroup-sizing-default"
@@ -154,11 +168,12 @@
       </div>
       <div class="container font-monospace bg-color">
         <div class="row bold h4">
-          <div class="col msg">
-            <label class="form-check-label h5" for="msg_label"
-              >Сообщения:
-            </label>
-            <label class="form-check-label h5" id="msg-label" for="msg"></label>
+          <div class="col">
+            <div
+              class="alert alert-danger msg d-none"
+              id="msg-label"
+              role="alert"
+            ></div>
           </div>
         </div>
       </div>
