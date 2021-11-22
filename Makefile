@@ -7,16 +7,14 @@ phpunit = ./vendor/bin/phpunit
 app_exec = docker-compose exec --workdir $(workdir)
 app_run  = docker-compose run --workdir $(workdir)
 
-#install logs
-logs =  | tee -a install.log
 
 run:
-	docker-compose stop $(logs)
-	docker-compose up -d --build $(logs)
-	docker-compose rm -f composer $(logs)
-	docker-compose exec php docker-php-ext-install mysqli pdo pdo_mysql $(logs)
-	docker-compose restart php $(logs)
-	make composer-install $(logs)
+	docker-compose stop 
+	docker-compose up -d --build 
+	docker-compose rm -f composer 
+	docker-compose exec php docker-php-ext-install mysqli pdo pdo_mysql 
+	docker-compose restart php 
+	make composer-install 
 
 restart:
 	docker-compose restart
