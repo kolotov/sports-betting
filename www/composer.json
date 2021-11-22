@@ -29,5 +29,17 @@
   ],
   "require": {
     "twbs/bootstrap": "5.1.3"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "rm -rf public/bootstrap",
+      "mkdir -p public/bootstrap",
+      "cp -r vendor/twbs/bootstrap/dist public/bootstrap"
+    ],
+    "post-update-cmd": [
+      "rm -rf public/bootstrap",
+      "mkdir -p public/bootstrap",
+      "cp -rf vendor/twbs/bootstrap/dist public/bootstrap"
+    ]
   }
 }
