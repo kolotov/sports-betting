@@ -1,1 +1,162 @@
-11111
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Bootstrap CSS -->
+
+    <link href="public/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="scss/style.scss" rel="stylesheet" />
+    <script src="public/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="js/presenter.js"></script>
+    <script src="js/controler.js"></script>
+    <title>Test task</title>
+    <style>
+      html,
+      body {
+        height: 100%;
+      }
+
+      button {
+        min-width: 80px;
+      }
+      .header-color {
+        background-color: var(--bs-gray-300);
+      }
+
+      .bg-color {
+        background-color: var(--bs-gray-100);
+      }
+
+      .content {
+        min-height: 100%;
+        height: 100%;
+        text-align: center;
+      }
+
+      .form {
+        max-width: 600px;
+      }
+      .msg {
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container content">
+      <h1 class="mb-4 mt-3">Демо букмекерского сайта</h1>
+      <div class="container form">
+        <div class="input-group mb-3">
+          <select id="user-id" class="form-select" aria-label="User select">
+            <option selected>Выбрать пользователя</option>
+          </select>
+
+          <span class="input-group-text" id="inputGroup-sizing-default-2"
+            >Баласн</span
+          >
+          <input
+            type="text"
+            id="user-balance"
+            class="form-control"
+            aria-label="Balane"
+            aria-describedby=""
+            disabled
+            readonly
+          />
+        </div>
+        <div class="input-group">
+          <div class="input-group mb-3">
+            <select
+              id="bet-currency"
+              class="form-select"
+              aria-label="Default select example"
+            >
+              <option selected>Выбрать валюту</option>
+              <option value="usd">USD</option>
+              <option value="eur">EUR</option>
+              <option value="rub">RUB</option>
+            </select>
+
+            <span class="input-group-text" id="inputGroup-sizing-default"
+              >Ставка</span
+            >
+
+            <input
+              type="text"
+              id="bet-sum"
+              class="form-control mr-4"
+              aria-label="Ставка"
+              aria-describedby="inputGroup-sizing-default"
+            />
+          </div>
+
+          <div class="form-check form-switch form-control-lg">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="winner"
+            />
+            <label class="form-check-label h5" for="win">Выигрывать</label>
+          </div>
+        </div>
+      </div>
+      <div class="container font-monospace bg-color mb-5">
+        <div class="row align-items-center header-color bold h4">
+          <div class="col">Матч</div>
+          <div class="col">Победа первой</div>
+          <div class="col">Ничья</div>
+          <div class="col">Победа второй</div>
+        </div>
+        <div class="row align-items-center">
+          <div class="col h5">Команда 1 - Команда 2</div>
+          <div class="col p-2">
+            <button
+              class="btn btn-outline-success"
+              type="button"
+              id="win-first"
+              data-ratio="9999"
+              data-result="1"
+            >
+              0.00
+            </button>
+          </div>
+          <div class="col">
+            <button
+              class="btn btn-outline-success"
+              type="button"
+              id="win-noone"
+              data-ratio="9999"
+              data-result="0"
+            >
+              0.00
+            </button>
+          </div>
+          <div class="col">
+            <button
+              class="btn btn-outline-success"
+              type="button"
+              id="win-second"
+              data-ratio="9999"
+              data-result="2"
+            >
+              0.00
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="container font-monospace bg-color">
+        <div class="row bold h4">
+          <div class="col msg">
+            <label class="form-check-label h5" for="msg_label"
+              >Сообщения:
+            </label>
+            <label class="form-check-label h5" id="msg-label" for="msg"></label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
