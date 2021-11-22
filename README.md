@@ -37,7 +37,7 @@
 
 Чтобы задеплоить проект выполните в командной строке
 ```bash
-git clone hhttps://github.com/kolotov/sports-betting.git
+git clone https://github.com/kolotov/sports-betting.git
 
 cd sports-betting
 
