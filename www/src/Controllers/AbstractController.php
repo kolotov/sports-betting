@@ -7,9 +7,11 @@ declare(strict_types=1);
 
 namespace Sports\Betting\Controllers;
 
+use Error;
 use Sports\Betting\Models\AbstractModel;
 use Sports\Betting\Views\AbstractView;
 use ReflectionClass;
+use ReflectionException;
 
 abstract class AbstractController
 {
@@ -45,13 +47,22 @@ abstract class AbstractController
 
     private function _getReflectionSubClass(string $parent_class_name, $sub_class_name): ReflectionClass
     {
-        $parent_class = new ReflectionClass($parent_class_name);
-        $sub_class = new ReflectionClass($sub_class_name);
-        if (! $sub_class->isSubclassOf($parent_class)) {
+        try {
+            $parent_class = new ReflectionClass($parent_class_name);
+            $sub_class = new ReflectionClass($sub_class_name);
+            if (! $sub_class->isSubclassOf($parent_class)) {
+                throw new Error(
+                    "Error: {$sub_class_name} isn't sub class {$parent_class_name}",
+                    404
+                );
+            }
+        } catch (ReflectionException $e) {
             throw new Error(
-                "Error: {$sub_class_name} isn't sub class {$parent_class_name}"
+                "Error: Incorrect context",
+                404
             );
         }
+
         return $sub_class;
     }
 }

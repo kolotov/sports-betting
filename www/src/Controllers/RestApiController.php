@@ -23,16 +23,17 @@ class RestApiController extends AbstractController
     public function process(string $entrypoint): void
     {
         $rest = $this->_getRestParams(($_SERVER['REQUEST_URI'] ?? ''), $entrypoint);
-        //phpinfo();
 
-        $method = $_SERVER['REQUEST_METHOD'] ?? '';
+        if (empty($rest)) {
+            return;
+        }
 
         $context = key($rest);
         $action = $rest[$context]['action'];
         $path_args = $rest[$context]['args'];
 
-
         //supported methods
+        $method = $_SERVER['REQUEST_METHOD'] ?? '';
         switch ($method) {
         case 'GET':
             $call_func = "get{$context}{$action}";
@@ -40,7 +41,6 @@ class RestApiController extends AbstractController
 
         case 'PUT':
             $call_func = "put{$context}{$action}";
-            //{"bet":{"currency":"usd","sum":100,"ratio":1.1,"result":0},"winner":1}
 
             // get the raw POST data
             $json = file_get_contents("php://input");
@@ -128,7 +128,7 @@ class RestApiController extends AbstractController
         [$context_segment, $action_segment] = $segments;
 
         $context = explode('/', $context_segment);
-        $context_name = $context[0];
+        $context_name = ucfirst($context[0]);
         $context_args = array_filter(array_slice($context, 1, 1));
 
 
