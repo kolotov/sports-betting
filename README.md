@@ -51,7 +51,7 @@ make run
 
 На ней можно сделать ставку нажав на соответствующий коэффициент исхода. Ставка будет сделана автоматически по клику. После чего будет выполнен расчет суммы и обновлен баланс счета. 
 
-
+![alt text](doc/demo_screen.png)
 
 
 ### База данных
@@ -67,5 +67,6 @@ PASSWORD mysql
 BD dump https://github.com/kolotov/sports-betting/blob/master/config/init.sql
 
 
+![alt text](doc/dbdiagram.png)
 
 
