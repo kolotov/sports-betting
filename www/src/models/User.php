@@ -5,10 +5,8 @@ declare(strict_types=1);
 
 namespace Sports\Betting\Models;
 
+use Error;
 use Sports\Betting\Libs\Database;
-
-use Exception;
-use stdClass;
 
 class User extends AbstractModel
 {
@@ -20,7 +18,23 @@ class User extends AbstractModel
         $this->_db = new Database();
     }
 
-    public function setUser(string $login): void
+    public function setUser(int $id): void
+    {
+        $count = $this->_db
+            ->query('SELECT user_id FROM users WHERE user_id=:user_id')
+            ->bind(':user_id', $id)
+            ->execute()
+            ->getCount();
+
+        if ($count === 0) {
+            throw new Error("Not found user {$id}", 404);
+        }
+
+        $this->_id =  $id;
+    }
+
+
+    public function setUserByLogin(string $login): void
     {
         $count = $this->_db
             ->query('SELECT user_id FROM users WHERE user_login=:login')
@@ -29,7 +43,7 @@ class User extends AbstractModel
             ->getCount();
 
         if ($count === 0) {
-            throw new Exception("Not found user {$login}", 404);
+            throw new Error("Not found user {$login}", 404);
         }
         $user = $this->_db->getRow();
         $this->_id =  $user->user_id;
@@ -56,7 +70,7 @@ class User extends AbstractModel
     private function _validCurency(string $currency): bool
     {
         if (!in_array($currency, ['usd', 'eur', 'rub'])) {
-            throw new Exception("Currency \"{$currency}\" is incorrect", 400);
+            throw new Error("Currency \"{$currency}\" is incorrect", 400);
         }
         return true;
     }
@@ -124,7 +138,7 @@ class User extends AbstractModel
     public function getUsers(): array
     {
         $users = $this->_db
-            ->query('SELECT user_login, user_name FROM users')
+            ->query('SELECT user_id, user_login, user_name FROM users')
             ->execute();
 
         if ($users->getCount() === 0) {

@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Sports\Betting\Views;
 
-use Exception;
-
 class RestApiView extends AbstractView
 {
     private $_json;

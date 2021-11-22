@@ -18,8 +18,8 @@ class UserTest extends TestCase
     public function setUp(): void
     {
         $this->_user = new User();
-        $login = 'bagration';
-        $this->_user->setUser($login);
+        $id = 1;
+        $this->_user->setUser($id);
     }
 
     /**
