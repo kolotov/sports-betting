@@ -32,7 +32,7 @@ class FrontController extends AbstractController
 
         case 'css':
         case 'js':
-        case 'vendor':
+        case 'bower_components':
             break;
 
         default:

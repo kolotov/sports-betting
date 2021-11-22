@@ -9,7 +9,6 @@ namespace Sports\Betting\Controllers;
 
 use Sports\Betting\Models\AbstractModel;
 use Sports\Betting\Views\AbstractView;
-use Exception;
 use ReflectionClass;
 
 abstract class AbstractController
@@ -49,7 +48,7 @@ abstract class AbstractController
         $parent_class = new ReflectionClass($parent_class_name);
         $sub_class = new ReflectionClass($sub_class_name);
         if (! $sub_class->isSubclassOf($parent_class)) {
-            throw new Exception(
+            throw new Error(
                 "Error: {$sub_class_name} isn't sub class {$parent_class_name}"
             );
         }

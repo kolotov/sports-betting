@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace Sports\Betting\Controllers;
 
-use Sports\Betting\Models\User;
+use Error;
 use Sports\Betting\Views\RestApiView;
-use Exception;
 use ReflectionMethod;
 
 class RestApiController extends AbstractController
@@ -24,7 +23,7 @@ class RestApiController extends AbstractController
     public function process(string $entrypoint): void
     {
         $rest = $this->_getRestParams(($_SERVER['REQUEST_URI'] ?? ''), $entrypoint);
-
+        //phpinfo();
 
         $method = $_SERVER['REQUEST_METHOD'] ?? '';
 
@@ -32,18 +31,8 @@ class RestApiController extends AbstractController
         $action = $rest[$context]['action'];
         $path_args = $rest[$context]['args'];
 
+
         //supported methods
-
-        // get the raw POST data
-        // header('Content-Type: application/json');
-        //$rawData = file_get_contents("php://input");
-
-        // this returns null if not valid json
-        // print_r($rawData);
-
-        //  print_r($_REQUEST);
-        // exit();
-
         switch ($method) {
         case 'GET':
             $call_func = "get{$context}{$action}";
@@ -52,7 +41,9 @@ class RestApiController extends AbstractController
         case 'PUT':
             $call_func = "put{$context}{$action}";
             //{"bet":{"currency":"usd","sum":100,"ratio":1.1,"result":0},"winner":1}
-            $json = $_REQUEST['data'] ?? '';
+
+            // get the raw POST data
+            $json = file_get_contents("php://input");
             $data = json_decode($json, true);
 
             if (!is_array($data)) {
@@ -95,7 +86,7 @@ class RestApiController extends AbstractController
 
             //call request method
             $this->_data = call_user_func_array(array($this->_context, $call_func), $args);
-        } catch (Exception $e) {
+        } catch (Error $e) {
             $this->_error($e->getMessage(), $e->getCode());
             return;
         }
@@ -140,6 +131,7 @@ class RestApiController extends AbstractController
         $context_name = $context[0];
         $context_args = array_filter(array_slice($context, 1, 1));
 
+
         $action = explode('/', $action_segment);
         $action_name = $action[0];
         $action_args = array_filter(array_slice($action, 1));
@@ -150,8 +142,6 @@ class RestApiController extends AbstractController
 
         return $result;
     }
-
-
 
 
     private function _success($message, $code = 200): void
@@ -170,7 +160,9 @@ class RestApiController extends AbstractController
 
     private function render(): void
     {
-        $data = (empty($this->_data['result'])) ? $this->_msg : [$this->_data['result'], $this->_msg];
+        $data = $this->_msg;
+        $data['result'] = $this->_data['result'] ?? '';
+
         $this->_view->setOutput($data, ($this->_data['location'] ?? ''));
         $this->_view->render();
     }

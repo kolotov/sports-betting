@@ -5,9 +5,8 @@ declare(strict_types=1);
 
 namespace Sports\Betting\Controllers;
 
+use Error;
 use Sports\Betting\Models\User;
-use Exception;
-use stdClass;
 
 class Users extends AbstractController
 {
@@ -20,42 +19,57 @@ class Users extends AbstractController
 
 
     //API /api/users/{login}/action/bet + POST DATA
-    public function putUsersBet(string $login, array $bet, int $winner): array
+    public function putUsersBet(int $id, array $bet, int $winner): array
     {
-        $this->_user->setUser($login);
+        $this->_user->setUser($id);
+
+        if ((is_numeric($bet['sum']) === false)
+            || (is_numeric($bet['ratio']) === false)
+            || (is_numeric($bet['result']) === false)
+        ) {
+            throw new Error('Incorrect args', 403);
+        }
+
+        $sum = (int) $bet['sum'];
+        $ratio = round($bet['ratio'], 2);
+        $result = (int) $bet['result'];
+
+
+        if ($sum < 1 || $sum > 500) {
+            throw new Error('The bet amount must be in the range from 1 to 500', 403);
+        }
+
+        if ($ratio < 1.01 || $ratio > 40.40) {
+            throw new Error('Ratio must range from 1.01 to 40.00', 403);
+        }
+
+
 
         //check balance
         $balance = $this->_user->getBalance($bet['currency']);
 
-        if ($balance < $bet['sum']) {
-            throw new Exception('Not enough money in the account', 403);
+        if ($balance < $sum) {
+            throw new Error('Not enough money in the account', 403);
         }
 
         //checking who winner
-        if ($bet['result'] === $winner) {
+        $change_balance = ($result === $winner) ?
             //calc money if win
-            $change_balance= $bet['sum'] * $bet['ratio'] - $bet['sum'];
-        } else {
+            $sum * $ratio - $sum :
+
             //calc money if losing
-            $change_balance = -1 * $bet['sum'];
-        }
+            -1 * $sum;
 
+        $this->_user->addBalance($bet['currency'], $change_balance);
 
-        print_r($balance. "\n");
-        print_r($change_balance);
-
-        //$this->_user->addBalance('usd', 1000);
-
-        $this->_user->setBalance('usd', $balance + $change_balance);
-
-        $location = "/api/users/{$login}/action/balance/{$bet['currency']}";
+        $location = "/api/users/{$id}/action/balance/{$bet['currency']}";
         return ['result' => true, 'location' => $location];
     }
 
     //API /api/users/{login}/action/balance/{$currency}
-    public function getUsersBalance($login, $currency): array
+    public function getUsersBalance(int $id, string $currency): array
     {
-        $this->_user->setUser($login);
+        $this->_user->setUser($id);
         $balance = $this->_user->getBalance($currency);
         return ['result' => $balance];
     }
@@ -69,9 +83,9 @@ class Users extends AbstractController
     }
 
     //API /api/users/{login}/action/info
-    public function getUsersInfo($login): array
+    public function getUsersInfo(int $id): array
     {
-        $this->_user->setUser($login);
+        $this->_user->setUser($id);
         $user = $this->_user->getUserInfo();
 
         return ['result' => $user];
