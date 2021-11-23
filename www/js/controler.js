@@ -2,12 +2,9 @@
 document.addEventListener("DOMContentLoaded", (event) => { 
     getUsersList();
 
-    document.getElementById("win-first").onmousedown = (e) => actionBet(e);
-    document.getElementById("win-noone").onmousedown = (e) => actionBet(e);
-    document.getElementById("win-second").onmousedown = (e) => actionBet(e);
+    document.getElementById("bet").onmousedown = (e) => actionBet(e);
     document.getElementById("user-id").onchange = (e) => getBalance();
     document.getElementById("bet-currency").onchange = (e) => getBalance();
-
 });
 
 const actionBet = (e) => {
@@ -15,16 +12,28 @@ const actionBet = (e) => {
     let data = {};
     let bet = {};    
 
+    let checked_el = (document.getElementById("win-first").checked) 
+         ? document.getElementById("win-first") : ''; 
+    
+     checked_el = (document.getElementById("win-noone").checked) 
+         ? document.getElementById("win-noone") : checked_el; 
+    
+     checked_el = (document.getElementById("win-second").checked) 
+         ? document.getElementById("win-second") : checked_el; 
 
-   if ((e.target.hasAttribute("data-ratio") === false) ||
-       (e.target.hasAttribute("data-result") === false)) {
+   if (typeof checked_el != "object") {
+        throw new Error("Вы должны выбрать исход!");
+   }
+
+   if ((checked_el.hasAttribute("data-ratio") === false) ||
+       (checked_el.hasAttribute("data-result") === false)) {
     throw new Error("Нарушена верстка страницы");
    }
     
-    const ratio = e.target.getAttribute("data-ratio");
+    const ratio = checked_el.getAttribute("data-ratio");
     bet.ratio = ratio;
     
-    const result = e.target.getAttribute("data-result");
+    const result = checked_el.getAttribute("data-result");
     bet.result = parseInt(result);
 
 

@@ -18,7 +18,7 @@
         height: 100%;
       }
 
-      button {
+      .ratio-btn {
         min-width: 80px;
       }
       .header-color {
@@ -112,11 +112,11 @@
               role="switch"
               id="winner"
             />
-            <label class="form-check-label h5" for="win">Выигрывать</label>
+            <label class="form-check-label h5" for="winner">Выигрывать</label>
           </div>
         </div>
       </div>
-      <label class="form-check-label h6 mb-3 msg" for="msg_info">
+      <label class="form-check-label h6 mb-3 msg">
         * Чтобы сделать ставку, нажмите на соответствующий коэффициент исхода.
         Ставка будет сделана автоматически по клику. После чего будет выполнен
         расчет суммы и обновлен баланс счета.
@@ -129,43 +129,70 @@
           <div class="col">Ничья</div>
           <div class="col">Победа второй</div>
         </div>
+
         <div class="row align-items-center">
           <div class="col h5">Команда 1 - Команда 2</div>
           <div class="col p-2">
-            <button
-              class="btn btn-outline-success"
-              type="button"
-              id="win-first"
-              data-ratio="9999"
-              data-result="1"
-            >
-              0.00
-            </button>
+            <div class="form-check">
+              <input
+                type="radio"
+                class="btn-check"
+                name="options-outlined"
+                autocomplete="off"
+                id="win-first"
+                data-ratio="9999"
+                data-result="2"
+              />
+              <label
+                id="win-first-label"
+                class="btn btn-outline-success ratio-btn"
+                for="win-first"
+                >0.0</label
+              >
+            </div>
           </div>
+
           <div class="col">
-            <button
-              class="btn btn-outline-success"
-              type="button"
+            <input
+              type="radio"
+              class="btn-check"
+              name="options-outlined"
+              autocomplete="off"
               id="win-noone"
               data-ratio="9999"
-              data-result="0"
+              data-result="2"
+            />
+            <label
+              id="win-noone-label"
+              class="btn btn-outline-success ratio-btn"
+              for="win-noone"
+              >0.0</label
             >
-              0.00
-            </button>
           </div>
           <div class="col">
-            <button
-              class="btn btn-outline-success"
-              type="button"
+            <input
+              type="radio"
+              class="btn-check"
+              name="options-outlined"
+              autocomplete="off"
               id="win-second"
               data-ratio="9999"
               data-result="2"
+            />
+            <label
+              id="win-second-label"
+              class="btn btn-outline-success ratio-btn"
+              for="win-second"
+              >0.0</label
             >
-              0.00
-            </button>
           </div>
         </div>
       </div>
+
+      <button type="button" id="bet" class="btn btn-warning mb-3">
+        Сделать ставку
+      </button>
+
       <div class="container font-monospace bg-color">
         <div class="row bold h4">
           <div class="col">
